@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Article;
 import com.jiayou.pet.service.IArticleService;
-import com.jiayou.pet.utils.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -33,8 +32,9 @@ public class ArticleController {
     public R save(@RequestBody Article article) {
         if (article.getId() == null) {
             article.setTime(DateUtil.now());
-            article.setUserId(TokenUtils.getCurrentUser().getId());
-            article.setUser(TokenUtils.getCurrentUser().getNickname());
+            //todo
+            // article.setUserId(TokenUtils.getCurrentUser().getId());
+            // article.setUser(TokenUtils.getCurrentUser().getNickname());
         }
         articleService.saveOrUpdate(article);
         return R.success();

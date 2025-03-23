@@ -8,7 +8,6 @@ import com.jiayou.pet.entity.Applcation;
 import com.jiayou.pet.entity.User;
 import com.jiayou.pet.service.IAnimalService;
 import com.jiayou.pet.service.IApplcationService;
-import com.jiayou.pet.utils.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -96,7 +95,9 @@ public class ApplcationController {
         List<Animal> animals = animalService.list();
         QueryWrapper<Applcation> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id");
-        User currentUser = TokenUtils.getCurrentUser();
+        // todo
+        // User currentUser = TokenUtils.getCurrentUser();
+        User currentUser = new User(); //todo
         if (currentUser == null) {
             return R.success(new ArrayList<>());
         }

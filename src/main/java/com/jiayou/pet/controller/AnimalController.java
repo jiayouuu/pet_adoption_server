@@ -3,7 +3,6 @@ package com.jiayou.pet.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
-import com.jiayou.pet.config.interceptor.AuthAccess;
 import com.jiayou.pet.entity.Animal;
 import com.jiayou.pet.service.IAnimalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,7 +60,6 @@ public class AnimalController {
     }
 
     @Operation(summary = "用户端分页查询动物")
-    @AuthAccess
     @GetMapping("/page/user")
     public R findPage(
             @RequestParam(defaultValue = "") String name,
@@ -77,7 +75,6 @@ public class AnimalController {
     }
 
     @Operation(summary = "管理端分页查询动物")
-    @AuthAccess
     @GetMapping("/page")
     public R findPage(@RequestParam(defaultValue = "") String name,
             @RequestParam(defaultValue = "") String adopt,

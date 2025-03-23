@@ -8,7 +8,7 @@ package com.jiayou.pet.common;
  */
 public class R {
 
-    private String code;
+    private Integer code;
     private String msg;
     private Object data;
 
@@ -20,7 +20,7 @@ public class R {
         return new R(Constants.CODE_200, "", data);
     }
 
-    public static R error(String code, String msg) {
+    public static R error(Integer code, String msg) {
         return new R(code, msg, null);
     }
 
@@ -31,17 +31,17 @@ public class R {
     public R() {
     }
 
-    public R(String code, String msg, Object data) {
+    public R(Integer code, String msg, Object data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

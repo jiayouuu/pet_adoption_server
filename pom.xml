@@ -77,11 +77,11 @@
         </dependency>
 
         <!-- JWT-->
-        <dependency>
+        <!-- <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>4.4.0</version>
-        </dependency>
+        </dependency> -->
 
         <!-- lombok-->
         <dependency>
@@ -91,48 +91,65 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- jiayou -->
+        <dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-security</artifactId>
+    	</dependency>
+        <dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-mail</artifactId>
+    	</dependency>
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+        <dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.16.1</version>
+		</dependency>
+		<dependency>
+        	<groupId>io.jsonwebtoken</groupId>
+        	<artifactId>jjwt-api</artifactId>
+        	<version>0.12.5</version>
+    	</dependency>
+    	<dependency>
+        	<groupId>io.jsonwebtoken</groupId>
+        	<artifactId>jjwt-impl</artifactId>
+        	<version>0.12.5</version>
+    	</dependency>
+    	<dependency>
+        	<groupId>io.jsonwebtoken</groupId>
+        	<artifactId>jjwt-jackson</artifactId>
+        	<version>0.12.5</version>
+    	</dependency>
+        <dependency>
+    		<groupId>org.mindrot</groupId>
+    		<artifactId>jbcrypt</artifactId>
+			<version>0.4</version>
+		</dependency>
+		<dependency>
+    		<groupId>com.github.penggle</groupId>
+    		<artifactId>kaptcha</artifactId>
+    		<version>2.3.2</version>
+		</dependency>
     </dependencies>
-
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
-    <repositories>
-        <repository>
-            <id>public</id>
-            <name>aliyun nexus</name>
-            <url>https://maven.aliyun.com/repository/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>public</id>
-            <name>aliyun nexus</name>
-            <url>https://maven.aliyun.com/repository/public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>

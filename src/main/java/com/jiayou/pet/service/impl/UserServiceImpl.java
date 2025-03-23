@@ -16,7 +16,6 @@ import com.jiayou.pet.mapper.RoleMenuMapper;
 import com.jiayou.pet.mapper.UserMapper;
 import com.jiayou.pet.service.IMenuService;
 import com.jiayou.pet.service.IUserService;
-import com.jiayou.pet.utils.TokenUtils;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
@@ -44,7 +43,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (one != null) {
             BeanUtil.copyProperties(one, userDTO, true);
             // 设置token
-            String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
+            // String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
+            // todo
+            String token = "d";
             userDTO.setToken(token);
 
             String role = one.getRole(); // ROLE_ADMIN

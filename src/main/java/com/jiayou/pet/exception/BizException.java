@@ -8,14 +8,14 @@ package com.jiayou.pet.exception;
  */
 public class BizException extends RuntimeException {
 
-    private String code;
+    private Integer code;
 
-    public BizException(String code, String msg) {
+    public BizException(Integer code, String msg) {
         super(msg);
         this.code = code;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 }

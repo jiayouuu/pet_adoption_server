@@ -20,8 +20,6 @@ import java.util.Date;
 @Schema(description = "用户对象")
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     @Schema(description = "id")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;

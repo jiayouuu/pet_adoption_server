@@ -9,7 +9,6 @@ import com.jiayou.pet.entity.Comment;
 import com.jiayou.pet.entity.User;
 import com.jiayou.pet.service.ICommentService;
 import com.jiayou.pet.service.IUserService;
-import com.jiayou.pet.utils.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -39,7 +38,8 @@ public class CommentController {
     @Operation(summary = "保存评论")
     @PostMapping
     public R save(@RequestBody Comment comment) {
-        comment.setUser(TokenUtils.getCurrentUser().getNickname());
+        // todo
+        // comment.setUser();
         comment.setTime(DateUtil.now());
         commentService.saveOrUpdate(comment);
         return R.success();

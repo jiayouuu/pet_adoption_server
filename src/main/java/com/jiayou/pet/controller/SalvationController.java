@@ -3,7 +3,6 @@ package com.jiayou.pet.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
-import com.jiayou.pet.config.interceptor.AuthAccess;
 import com.jiayou.pet.entity.Salvation;
 import com.jiayou.pet.service.ISalvationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -61,7 +60,6 @@ public class SalvationController {
     }
 
     @Operation(summary = "分页查询救助现场信息")
-    @AuthAccess
     @GetMapping("/page")
     public R findPage(
             @RequestParam(defaultValue = "") String name,

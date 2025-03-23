@@ -10,6 +10,17 @@ spring:
     multipart:
       max-file-size: 2048MB
       max-request-size: 2048MB
+  mail:
+        host: smtp.qq.com
+        username: jiayouuu@foxmail.com
+        password: gtuixzhdoxbvdabi
+        port: 465
+        properties:
+            mail:
+                smtp:
+                    socketFactory: 
+                        class: javax.net.ssl.SSLSocketFactory
+        default-encoding: UTF-8
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
@@ -19,3 +30,5 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
+jwt:
+    secret: cGV0c19vbmxpbmVfYnlfamlheW91PSpLj5wuXXofO56MDWpPK35cHZmj9ui0wtfw5am4w-TR96K2

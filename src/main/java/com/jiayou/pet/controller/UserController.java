@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.Constants;
 import com.jiayou.pet.common.R;
-import com.jiayou.pet.config.interceptor.AuthAccess;
 import com.jiayou.pet.controller.dto.UserDTO;
 import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.User;
@@ -91,11 +90,10 @@ public class UserController {
     }
 
     @Operation(summary = "重置密码")
-    @AuthAccess
     @PutMapping("/reset")
     public R reset(@RequestBody UserPasswordDTO userPasswordDTO) {
         if (StrUtil.isBlank(userPasswordDTO.getUsername()) || StrUtil.isBlank(userPasswordDTO.getPhone())) {
-            throw new BizException("-1", "参数异常");
+            throw new BizException(-1, "参数异常");
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", userPasswordDTO.getUsername());
