@@ -15,6 +15,7 @@ import java.util.List;
 @Data
 public class UserDTO {
     private Integer id;
+    private String email;
     private String username;
     private String password;
     private String nickname;
@@ -22,5 +23,4 @@ public class UserDTO {
     private String token;
     private String role;
     private List<Menu> menus;
-
 }

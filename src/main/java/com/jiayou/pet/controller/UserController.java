@@ -12,7 +12,6 @@ import com.jiayou.pet.common.R;
 import com.jiayou.pet.controller.dto.UserDTO;
 import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.User;
-import com.jiayou.pet.exception.BizException;
 import com.jiayou.pet.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,20 +47,18 @@ public class UserController {
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
             return R.error(Constants.CODE_400, "参数错误");
         }
-        UserDTO dto = userService.login(userDTO);
-        return R.success(dto);
+        return userService.login(userDTO);
+
     }
 
     @Operation(summary = "用户注册")
     @PostMapping("/register")
-    public R register(@RequestBody UserDTO userDTO) {
-        String username = userDTO.getUsername();
-        String password = userDTO.getPassword();
-        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
-            return R.error(Constants.CODE_400, "参数错误");
+    public R register(@RequestBody User user) {
+        try {
+            return userService.register(user);
+        } catch (Exception e) {
+            return R.error(Constants.CODE_500, e.getMessage());
         }
-        userDTO.setNickname(userDTO.getUsername());
-        return R.success(userService.register(userDTO));
     }
 
     @Operation(summary = "保存用户")
@@ -85,15 +82,14 @@ public class UserController {
     @Operation(summary = "修改密码")
     @PostMapping("/password")
     public R password(@RequestBody UserPasswordDTO userPasswordDTO) {
-        userService.updatePassword(userPasswordDTO);
-        return R.success();
+        return userService.updatePassword(userPasswordDTO);
     }
 
     @Operation(summary = "重置密码")
     @PutMapping("/reset")
     public R reset(@RequestBody UserPasswordDTO userPasswordDTO) {
         if (StrUtil.isBlank(userPasswordDTO.getUsername()) || StrUtil.isBlank(userPasswordDTO.getPhone())) {
-            throw new BizException(-1, "参数异常");
+            return R.error(-1, "参数异常");
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", userPasswordDTO.getUsername());

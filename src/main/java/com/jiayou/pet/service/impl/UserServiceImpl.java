@@ -4,22 +4,26 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.jiayou.pet.common.Constants;
+import com.jiayou.pet.common.R;
 import com.jiayou.pet.common.RoleEnum;
 import com.jiayou.pet.controller.dto.UserDTO;
 import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.Menu;
 import com.jiayou.pet.entity.User;
-import com.jiayou.pet.exception.BizException;
 import com.jiayou.pet.mapper.RoleMapper;
 import com.jiayou.pet.mapper.RoleMenuMapper;
 import com.jiayou.pet.mapper.UserMapper;
 import com.jiayou.pet.service.IMenuService;
 import com.jiayou.pet.service.IUserService;
+import com.jiayou.pet.utils.Encrypt;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -38,7 +42,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private IMenuService menuService;
 
     @Override
-    public UserDTO login(UserDTO userDTO) {
+    public R login(UserDTO userDTO) {
         User one = getUserInfo(userDTO);
         if (one != null) {
             BeanUtil.copyProperties(one, userDTO, true);
@@ -52,33 +56,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             // 设置用户的菜单列表
             List<Menu> roleMenus = getRoleMenus(role);
             userDTO.setMenus(roleMenus);
-            return userDTO;
+            HashMap<String,Object> map = new HashMap<>();
+            map.put("token",token);
+            return R.success(map);
         } else {
-            throw new BizException(Constants.CODE_600, "用户名或密码错误");
+            return R.error(400,"用户名或密码错误");
         }
     }
 
     @Override
-    public User register(UserDTO userDTO) {
-        User one = getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, userDTO.getUsername()));
-        if (one == null) {
-            one = new User();
-            BeanUtil.copyProperties(userDTO, one, true);
-            // 默认一个普通用户的角色
-            one.setRole(RoleEnum.ROLE_USER.toString());
-            save(one); // 把 copy完之后的用户对象存储到数据库
-        } else {
-            throw new BizException(Constants.CODE_600, "用户已存在");
+    public R register(User user) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String tokenEmail = authentication.getName();
+        if (!tokenEmail.equals(user.getEmail())) {
+            return R.error(400, "邮箱不匹配,请重试");
         }
-        return one;
+        if (null !=getOne(Wrappers.<User>lambdaQuery().eq(User::getEmail, user.getEmail()))) {
+            return R.error(400,"邮箱已经注册，请直接登录");
+        } 
+        // 默认一个普通用户的角色
+        user.setPassword(Encrypt.hashPassword(user.getPassword()));
+        user.setNickname(user.getEmail());
+        user.setUsername(user.getEmail());
+        user.setRole(RoleEnum.ROLE_USER.toString());
+        if(!save(user)){
+            return R.error(400,"注册失败");
+        }
+        return R.success();
     }
 
     @Override
-    public void updatePassword(UserPasswordDTO userPasswordDTO) {
+    public R updatePassword(UserPasswordDTO userPasswordDTO) {
         int update = userMapper.updatePassword(userPasswordDTO);
         if (update < 1) {
-            throw new BizException(Constants.CODE_600, "密码错误");
+            return R.error(400,"密码错误");
         }
+        return R.success();
     }
 
     private User getUserInfo(UserDTO userDTO) {

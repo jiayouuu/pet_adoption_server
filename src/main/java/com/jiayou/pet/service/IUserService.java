@@ -1,15 +1,16 @@
 package com.jiayou.pet.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.jiayou.pet.common.R;
 import com.jiayou.pet.controller.dto.UserDTO;
 import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.User;
 
 public interface IUserService extends IService<User> {
 
-    UserDTO login(UserDTO userDTO);
+    R login(UserDTO userDTO);
 
-    User register(UserDTO userDTO);
+    R register(User user);
 
-    void updatePassword(UserPasswordDTO userPasswordDTO);
+    R updatePassword(UserPasswordDTO userPasswordDTO);
 }
