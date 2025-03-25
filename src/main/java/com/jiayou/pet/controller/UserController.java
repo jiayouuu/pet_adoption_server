@@ -9,7 +9,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.Constants;
 import com.jiayou.pet.common.R;
-import com.jiayou.pet.controller.dto.UserDTO;
 import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.User;
 import com.jiayou.pet.service.IUserService;
@@ -23,7 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 /**
  * 用户 控制层
@@ -41,16 +44,18 @@ public class UserController {
 
     @Operation(summary = "用户登录")
     @PostMapping("/login")
-    public R login(@RequestBody UserDTO userDTO) {
-        String username = userDTO.getUsername();
-        String password = userDTO.getPassword();
-        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
-            return R.error(Constants.CODE_400, "参数错误");
+    public R login(@RequestBody User user) {
+        try {
+            return userService.login(user);
+        } catch (Exception e) {
+            return R.error(Constants.CODE_500, e.getMessage());
         }
-        return userService.login(userDTO);
-
     }
-
+    @PostMapping("/test")
+    public String postMethodName(@RequestBody HashMap <String, Object> entity) {
+        return (String) entity.get("email");
+    }
+    
     @Operation(summary = "用户注册")
     @PostMapping("/register")
     public R register(@RequestBody User user) {

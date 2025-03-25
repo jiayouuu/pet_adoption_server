@@ -1,12 +1,9 @@
 package com.jiayou.pet.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.common.RoleEnum;
-import com.jiayou.pet.controller.dto.UserDTO;
 import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.Menu;
 import com.jiayou.pet.entity.User;
@@ -16,6 +13,7 @@ import com.jiayou.pet.mapper.UserMapper;
 import com.jiayou.pet.service.IMenuService;
 import com.jiayou.pet.service.IUserService;
 import com.jiayou.pet.utils.Encrypt;
+import com.jiayou.pet.utils.JwtUtil;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +23,7 @@ import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
@@ -41,27 +40,34 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Resource
     private IMenuService menuService;
 
+    private JwtUtil jwtUtil;
+    public UserServiceImpl(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
     @Override
-    public R login(UserDTO userDTO) {
-        User one = getUserInfo(userDTO);
-        if (one != null) {
-            BeanUtil.copyProperties(one, userDTO, true);
+    public R login(User user) {
+        User existUser = userMapper.findByEmail(user.getEmail());
+        if(existUser == null){
+            return R.error(400,"邮箱未注册");
+        }
+        if (!Encrypt.checkPassword(user.getPassword(), existUser.getPassword())) {
+            return R.error(400,"密码错误");
+        }
+
             // 设置token
             // String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
             // todo
-            String token = "d";
-            userDTO.setToken(token);
-
-            String role = one.getRole(); // ROLE_ADMIN
-            // 设置用户的菜单列表
-            List<Menu> roleMenus = getRoleMenus(role);
-            userDTO.setMenus(roleMenus);
+            String token = jwtUtil.generateToken(new HashMap<String,Object>() {{
+                put("id", existUser.getId().toString());
+                put("role",existUser.getRole());
+                put("nickname",existUser.getNickname());
+                put("user",existUser);
+                put("menus",getRoleMenus(existUser.getRole()));
+            }}, 7, TimeUnit.DAYS);
             HashMap<String,Object> map = new HashMap<>();
             map.put("token",token);
             return R.success(map);
-        } else {
-            return R.error(400,"用户名或密码错误");
-        }
+
     }
 
     @Override
@@ -92,15 +98,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             return R.error(400,"密码错误");
         }
         return R.success();
-    }
-
-    private User getUserInfo(UserDTO userDTO) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", userDTO.getUsername());
-        queryWrapper.eq("password", userDTO.getPassword());
-        User one;
-        one = getOne(queryWrapper); // 从数据库查询用户信息
-        return one;
     }
 
     /**
