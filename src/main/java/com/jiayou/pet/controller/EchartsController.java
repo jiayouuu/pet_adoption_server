@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Tag(name = "图表管理", description = "图表相关接口")
 @RestController
-@RequestMapping("/echarts")
+@RequestMapping("/api/echarts")
 public class EchartsController {
 
     @Resource

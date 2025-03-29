@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  */
 @Tag(name = "评论管理", description = "评论相关接口")
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/api/comment")
 public class CommentController {
 
     @Resource

@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Tag(name = "公告管理", description = "公告相关接口")
 @RestController
-@RequestMapping("/notice")
+@RequestMapping("/api/notice")
 public class NoticeController {
 
     @Resource

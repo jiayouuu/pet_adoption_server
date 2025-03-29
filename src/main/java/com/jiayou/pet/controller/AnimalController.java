@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Tag(name = "动物管理", description = "动物相关接口")
 @RestController
-@RequestMapping("/animal")
+@RequestMapping("/api/animal")
 public class AnimalController {
 
     @Resource

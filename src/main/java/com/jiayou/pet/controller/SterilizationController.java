@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Tag(name = "救助内容管理", description = "救助内容相关接口")
 @RestController
-@RequestMapping("/sterilization")
+@RequestMapping("/api/sterilization")
 public class SterilizationController {
 
     @Resource

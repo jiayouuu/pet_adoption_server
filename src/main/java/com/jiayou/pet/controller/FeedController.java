@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Tag(name = "喂养管理", description = "喂养相关接口")
 @RestController
-@RequestMapping("/feed")
+@RequestMapping("/api/feed")
 public class FeedController {
 
     @Resource

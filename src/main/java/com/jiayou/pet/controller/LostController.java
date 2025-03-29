@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Tag(name = "宠物走失管理", description = "宠物走失相关接口")
 @RestController
-@RequestMapping("/lost")
+@RequestMapping("/api/lost")
 public class LostController {
 
     @Resource

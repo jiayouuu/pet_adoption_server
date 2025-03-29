@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Tag(name = "领养管理", description = "领养相关接口")
 @RestController
-@RequestMapping("/applcation")
+@RequestMapping("/api/applcation")
 public class ApplcationController {
 
     @Resource

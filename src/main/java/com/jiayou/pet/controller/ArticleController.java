@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Tag(name = "文章管理", description = "文章相关接口")
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/api/article")
 public class ArticleController {
 
     @Resource

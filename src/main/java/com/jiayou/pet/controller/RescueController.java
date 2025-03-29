@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Tag(name = "救助管理", description = "救助相关接口")
 @RestController
-@RequestMapping("/rescue")
+@RequestMapping("/api/rescue")
 public class RescueController {
 
     @Resource

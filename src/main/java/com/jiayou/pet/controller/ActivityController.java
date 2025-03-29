@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Tag(name = "活动管理", description = "活动相关接口")
 @RestController
-@RequestMapping("/activity")
+@RequestMapping("/api/activity")
 public class ActivityController {
 
     @Resource

@@ -32,7 +32,7 @@ import java.util.List;
  */
 @Tag(name = "文件管理", description = "文件上传下载相关接口")
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/api/file")
 public class FileController {
     @Value("${server.port}")
     private String serverPort;

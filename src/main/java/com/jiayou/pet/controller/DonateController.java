@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Tag(name = "捐款管理", description = "捐款相关接口")
 @RestController
-@RequestMapping("/donate")
+@RequestMapping("/api/donate")
 public class DonateController {
 
     @Resource

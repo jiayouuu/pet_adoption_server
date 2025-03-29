@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Tag(name = "菜单管理", description = "菜单相关接口")
 @RestController
-@RequestMapping("/menu")
+@RequestMapping("/api/menu")
 public class MenuController {
 
     @Resource

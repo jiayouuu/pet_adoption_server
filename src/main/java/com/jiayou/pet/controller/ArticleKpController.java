@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Tag(name = "文章封面管理", description = "文章封面相关接口")
 @RestController
-@RequestMapping("/articleKp")
+@RequestMapping("/api/articleKp")
 public class ArticleKpController {
 
     @Resource
