@@ -60,7 +60,7 @@ public class SecurityConfig {
                             resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             resp.setContentType("application/json");
                             resp.setCharacterEncoding("UTF-8");
-                            resp.getWriter().write("{\"code\": 401, \"message\": \"未授权\", \"data\": \"null\"}");
+                            resp.getWriter().write("{\"code\": 401, \"msg\": \"未授权\", \"data\": \"null\"}");
                         })
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

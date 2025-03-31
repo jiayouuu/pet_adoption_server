@@ -12,6 +12,8 @@ import com.jiayou.pet.common.R;
 import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.User;
 import com.jiayou.pet.service.IUserService;
+import com.jiayou.pet.utils.JwtUtil;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -24,9 +26,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户 控制层
@@ -42,6 +42,9 @@ public class UserController {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private JwtUtil jwtUtil;
+
     @Operation(summary = "用户登录")
     @PostMapping("/login")
     public R login(@RequestBody User user) {
@@ -51,11 +54,7 @@ public class UserController {
             return R.error(Constants.CODE_500, e.getMessage());
         }
     }
-    @PostMapping("/test")
-    public String postMethodName(@RequestBody HashMap <String, Object> entity) {
-        return (String) entity.get("email");
-    }
-    
+
     @Operation(summary = "用户注册")
     @PostMapping("/register")
     public R register(@RequestBody User user) {
@@ -69,19 +68,22 @@ public class UserController {
     @Operation(summary = "保存用户")
     @PostMapping
     public R save(@RequestBody User user) {
-        String username = user.getUsername();
-        if (StrUtil.isBlank(username)) {
-            return R.error(Constants.CODE_400, "参数错误");
-        }
-        if (user.getId() != null) {
-            user.setPassword(null);
-        } else {
-            user.setNickname(user.getUsername());
-            if (user.getPassword() == null) {
-                user.setPassword("123");
+        try {
+            boolean flag = userService.saveOrUpdate(user);
+            if (flag) {
+                User saveUser = userService.getById(user.getId());
+                saveUser.setPassword(null);
+                String token = jwtUtil.generateToken(new HashMap<>() {
+                    {
+                        put("user", saveUser);
+                    }
+                }, 7, TimeUnit.DAYS);
+                return R.success(token);
             }
+            return R.error(400,"保存失败");
+        } catch (Exception e) {
+            return R.error(500, e.getMessage());
         }
-        return R.success(userService.saveOrUpdate(user));
     }
 
     @Operation(summary = "修改密码")

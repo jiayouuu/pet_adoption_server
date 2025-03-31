@@ -57,12 +57,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             // 设置token
             // String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
             // todo
+            existUser.setPassword(null);
             String token = jwtUtil.generateToken(new HashMap<String,Object>() {{
-                put("id", existUser.getId().toString());
-                put("role",existUser.getRole());
-                put("nickname",existUser.getNickname());
-                put("email",existUser.getEmail());
-                put("avatar",existUser.getAvatarUrl());
                 put("user",existUser);
                 put("menus",getRoleMenus(existUser.getRole()));
             }}, 7, TimeUnit.DAYS);
