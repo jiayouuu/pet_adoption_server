@@ -13,6 +13,8 @@ import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.User;
 import com.jiayou.pet.service.IUserService;
 import com.jiayou.pet.utils.JwtUtil;
+import com.jiayou.pet.utils.SpringBeanUtil;
+import com.jiayou.pet.utils.WebSocketUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,6 +47,9 @@ public class UserController {
     @Resource
     private JwtUtil jwtUtil;
 
+    @Resource
+    private WebSocketUtils webSocketUtils;
+
     @Operation(summary = "用户登录")
     @PostMapping("/login")
     public R login(@RequestBody User user) {
@@ -73,14 +78,12 @@ public class UserController {
             if (flag) {
                 User saveUser = userService.getById(user.getId());
                 saveUser.setPassword(null);
-                String token = jwtUtil.generateToken(new HashMap<>() {
-                    {
-                        put("user", saveUser);
-                    }
-                }, 7, TimeUnit.DAYS);
+                String token = jwtUtil.generateToken(SpringBeanUtil.objectToMap(saveUser), 7, TimeUnit.DAYS);
+                webSocketUtils.sendBroadcast(token);
+                webSocketUtils.sendUnicast(saveUser.getEmail(), "123");
                 return R.success(token);
             }
-            return R.error(400,"保存失败");
+            return R.error(400, "保存失败");
         } catch (Exception e) {
             return R.error(500, e.getMessage());
         }

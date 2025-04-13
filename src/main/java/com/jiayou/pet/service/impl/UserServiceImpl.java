@@ -14,6 +14,7 @@ import com.jiayou.pet.service.IMenuService;
 import com.jiayou.pet.service.IUserService;
 import com.jiayou.pet.utils.Encrypt;
 import com.jiayou.pet.utils.JwtUtil;
+import com.jiayou.pet.utils.SpringBeanUtil;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -58,10 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             // String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
             // todo
             existUser.setPassword(null);
-            String token = jwtUtil.generateToken(new HashMap<String,Object>() {{
-                put("user",existUser);
-                put("menus",getRoleMenus(existUser.getRole()));
-            }}, 7, TimeUnit.DAYS);
+            String token = jwtUtil.generateToken(SpringBeanUtil.objectToMap(existUser), 7, TimeUnit.DAYS);
             HashMap<String,Object> map = new HashMap<>();
             map.put("token",token);
             return R.success(map);
@@ -82,7 +80,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         user.setPassword(Encrypt.hashPassword(user.getPassword()));
         user.setNickname(user.getEmail());
         user.setUsername(user.getEmail());
-        user.setRole(RoleEnum.ROLE_USER.toString());
+        user.setRole(RoleEnum.USER.toString());
         if(!save(user)){
             return R.error(400,"注册失败");
         }

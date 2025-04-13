@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.jiayou.pet</groupId>
-    <artifactId>pet-backend</artifactId>
+    <artifactId>pet_daoption_server</artifactId>
     <version>1.0.0</version>
 
     <properties>

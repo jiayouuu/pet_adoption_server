@@ -10,7 +10,7 @@ import lombok.Data;
  * @date: 2024-01-08
  */
 @Data
-@TableName("sys_role_menu")
+@TableName("menu")
 public class RoleMenu {
 
     private Integer roleId;

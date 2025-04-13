@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @date: 2024-01-08
  */
 @Data
-@TableName("sys_role")
+@TableName("role")
 @Schema(description = "角色实体")
 public class Role implements Serializable {
 

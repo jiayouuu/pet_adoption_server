@@ -16,7 +16,7 @@ import java.util.Date;
  * @date: 2024-01-08
  */
 @Data
-@TableName("sys_user")
+@TableName("user")
 @Schema(description = "用户对象")
 public class User implements Serializable {
 

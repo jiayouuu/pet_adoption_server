@@ -14,7 +14,7 @@ import lombok.Data;
  */
 @Data
 @Schema(description = "文件实体")
-@TableName("sys_file")
+@TableName("file")
 public class Files {
 
     @TableId(type = IdType.AUTO)

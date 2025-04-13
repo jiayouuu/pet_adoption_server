@@ -17,7 +17,7 @@ import java.util.List;
  * @date: 2024-01-08
  */
 @Data
-@TableName("sys_menu")
+@TableName("menu")
 @Schema(description = "菜单实体")
 public class Menu implements Serializable {
 

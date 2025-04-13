@@ -10,7 +10,7 @@ import lombok.Data;
  * @date: 2024-01-08
  */
 @Data
-@TableName("sys_dict")
+@TableName("dict")
 public class Dict {
 
     private String name;

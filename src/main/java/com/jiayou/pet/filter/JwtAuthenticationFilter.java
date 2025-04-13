@@ -39,9 +39,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (token != null && !token.isEmpty() && jwtUtil.validateToken(token)) {
-            Object email = jwtUtil.getClaimFromToken(token, "email");
+            String email = jwtUtil.getClaimFromToken(token, "email").toString();
             Object id = jwtUtil.getClaimFromToken(token, "id");
-            Object roles = jwtUtil.getClaimFromToken(token, "roles");
+            Object roles = jwtUtil.getClaimFromToken(token, "role");
             List<GrantedAuthority> authorities = new ArrayList<>();
             if (roles instanceof List<?>) {
                 List<?> rolesList = (List<?>) roles;
