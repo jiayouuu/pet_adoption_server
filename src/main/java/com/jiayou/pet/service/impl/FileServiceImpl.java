@@ -4,6 +4,10 @@ import com.jiayou.pet.config.FileUploadConfig;
 import com.jiayou.pet.controller.dto.file.FileUploadReq;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.service.FileService;
+import com.jiayou.pet.utils.WebSocketUtils;
+
+import jakarta.annotation.Resource;
+
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -30,12 +34,17 @@ public class FileServiceImpl implements FileService {
 
     private final Map<String, Integer> chunkCountMap = new ConcurrentHashMap<>();
     private final Map<String, Long> lastUploadTimeMap = new ConcurrentHashMap<>();
+
+    @Resource
+    private WebSocketUtils webSocketUtils;
     @Autowired
     private SimpMessagingTemplate messagingTemplate; // 注入 WebSocket 消息模板
-    public FileServiceImpl(FileUploadConfig fileUploadConfig,SimpMessagingTemplate messagingTemplate) {
+
+    public FileServiceImpl(FileUploadConfig fileUploadConfig, SimpMessagingTemplate messagingTemplate) {
         this.fileUploadConfig = fileUploadConfig;
         this.messagingTemplate = messagingTemplate;
     }
+
     @Override
     public R upload(FileUploadReq req) {
         MultipartFile chunk = req.getChunk();
@@ -58,8 +67,10 @@ public class FileServiceImpl implements FileService {
             String tempDir = uploadDir + TEMP_SUBDIR + File.separator;
             Path tempDirPath = Paths.get(tempDir);
             Path uploadDirPath = Paths.get(uploadDir);
-            if (!Files.exists(tempDirPath)) Files.createDirectories(tempDirPath);
-            if (!Files.exists(uploadDirPath)) Files.createDirectories(uploadDirPath);
+            if (!Files.exists(tempDirPath))
+                Files.createDirectories(tempDirPath);
+            if (!Files.exists(uploadDirPath))
+                Files.createDirectories(uploadDirPath);
             // 保存分片到临时目录
             String chunkFileName = fileId + "_chunk_" + chunkIndex;
             Path chunkPath = Paths.get(tempDir, chunkFileName);
@@ -67,12 +78,11 @@ public class FileServiceImpl implements FileService {
 
             // 更新分片计数和最后上传时间
             // 使用 compute 原子更新 chunkCountMap
-            int currentCount = chunkCountMap.compute(fileId, (key, oldValue) ->
-                    oldValue == null ? 1 : oldValue + 1);
+            int currentCount = chunkCountMap.compute(fileId, (key, oldValue) -> oldValue == null ? 1 : oldValue + 1);
             lastUploadTimeMap.put(fileId, System.currentTimeMillis());
             // 计算并通过 WebSocket 发送上传进度
-            int progress = (int) Math.round((currentCount / (double) totalChunks) * 100);
-            messagingTemplate.convertAndSend("/topic/upload-progress/" + fileId, progress);
+            String progress = String.valueOf(Math.round((currentCount / (double) totalChunks) * 100));
+            webSocketUtils.sendUnicast("/upload-progress/" + fileId, progress);
             if (currentCount > totalChunks) {
                 return R.error(400, "分片数量异常");
             }
@@ -83,15 +93,15 @@ public class FileServiceImpl implements FileService {
                         return R.error(500, "分片丢失，无法合并");
                     }
                 }
-                String finalFileName = UUID.randomUUID().toString().replace("-", "")+fileExtension;
+                String finalFileName = UUID.randomUUID().toString().replace("-", "") + fileExtension;
                 Path finalPath = Paths.get(uploadDir, finalFileName);
-                boolean isMerged =mergeChunks(fileId,hash, totalChunks, finalPath);
+                boolean isMerged = mergeChunks(fileId, hash, totalChunks, finalPath);
                 cleanup(fileId, totalChunks);
                 chunkCountMap.remove(fileId);
                 lastUploadTimeMap.remove(fileId);
                 if (isMerged) {
                     // 通过 WebSocket 发送最终文件名
-                    messagingTemplate.convertAndSend("/topic/upload-complete/" + fileId, finalFileName);
+                    webSocketUtils.sendUnicast("/upload-complete/" + fileId, finalFileName);
                 } else {
                     return R.error(500, "分片校验或合并失败");
                 }
@@ -101,8 +111,6 @@ public class FileServiceImpl implements FileService {
             return R.error(500, "上传失败: " + e.getMessage());
         }
     }
-
-
 
     @Override
     public File getFileByName(String fileName) throws IOException {
@@ -135,7 +143,7 @@ public class FileServiceImpl implements FileService {
     }
 
     // 合并分片
-    private boolean mergeChunks(String fileId,String hash, int totalChunks, Path finalPath) throws IOException {
+    private boolean mergeChunks(String fileId, String hash, int totalChunks, Path finalPath) throws IOException {
         File finalFile = finalPath.toFile();
         String tempDir = fileUploadConfig.getDir() + File.separator + TEMP_SUBDIR + File.separator;
         for (int i = 0; i < totalChunks; i++) {
@@ -150,10 +158,11 @@ public class FileServiceImpl implements FileService {
                 finalFile.delete();
                 return false;
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
+
     // 清理临时文件
     private void cleanup(String fileId, int totalChunks) throws IOException {
         String tempDir = fileUploadConfig.getDir() + File.separator + TEMP_SUBDIR + File.separator;
@@ -165,6 +174,7 @@ public class FileServiceImpl implements FileService {
         }
 
     }
+
     private String calculateFileHash(File file) throws IOException, NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("SHA-256"); // 使用 SHA-256
         byte[] buffer = new byte[8192];
@@ -183,6 +193,7 @@ public class FileServiceImpl implements FileService {
         }
         return sb.toString();
     }
+
     // 定时清理过期分片
     @Scheduled(fixedRate = 10000)
     public void cleanExpiredChunks() {

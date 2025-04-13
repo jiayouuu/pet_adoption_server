@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -79,8 +78,6 @@ public class UserController {
                 User saveUser = userService.getById(user.getId());
                 saveUser.setPassword(null);
                 String token = jwtUtil.generateToken(SpringBeanUtil.objectToMap(saveUser), 7, TimeUnit.DAYS);
-                webSocketUtils.sendBroadcast(token);
-                webSocketUtils.sendUnicast(saveUser.getEmail(), "123");
                 return R.success(token);
             }
             return R.error(400, "保存失败");
