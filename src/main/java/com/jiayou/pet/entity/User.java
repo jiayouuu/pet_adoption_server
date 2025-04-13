@@ -24,9 +24,6 @@ public class User implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @Schema(description = "用户名")
-    private String username;
-
     @Schema(description = "密码")
     private String password;
 

@@ -5,14 +5,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiayou.pet.entity.Menu;
 import com.jiayou.pet.mapper.MenuMapper;
-import com.jiayou.pet.service.IMenuService;
+import com.jiayou.pet.service.MenuService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
+public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     @Override
     public List<Menu> findMenus(String name) {

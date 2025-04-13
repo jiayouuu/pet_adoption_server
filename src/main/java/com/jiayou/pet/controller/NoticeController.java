@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Notice;
-import com.jiayou.pet.service.INoticeService;
+import com.jiayou.pet.service.NoticeService;
+
+import cn.hutool.core.lang.hash.Hash;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,7 +27,7 @@ import java.util.List;
 public class NoticeController {
 
     @Resource
-    private INoticeService noticeService;
+    private NoticeService noticeService;
 
     @Operation(summary = "保存公告")
     @PostMapping
@@ -51,6 +54,19 @@ public class NoticeController {
     @GetMapping("/front")
     public R front() {
         return R.success(noticeService.limit(5));
+    }
+
+    @Operation(summary = "根据ID推送公告")
+    @PostMapping("/push")
+    public R push(@RequestBody HashMap<String, Object> map) {
+        try {
+            String id = (String) map.get("id");
+            noticeService.push(id);
+            return R.success();
+        } catch (Exception e) {
+            return R.error(500, e.getMessage());
+        }
+
     }
 
     @Operation(summary = "查询所有公告")

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Sterilization;
-import com.jiayou.pet.service.ISterilizationService;
+import com.jiayou.pet.service.SterilizationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -24,7 +24,7 @@ import java.util.List;
 public class SterilizationController {
 
     @Resource
-    private ISterilizationService sterilizationService;
+    private SterilizationService sterilizationService;
 
     @Operation(summary = "保存救助内容")
     @PostMapping

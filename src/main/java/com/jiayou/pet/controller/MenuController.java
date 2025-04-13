@@ -7,7 +7,7 @@ import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Dict;
 import com.jiayou.pet.entity.Menu;
 import com.jiayou.pet.mapper.DictMapper;
-import com.jiayou.pet.service.IMenuService;
+import com.jiayou.pet.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -27,7 +27,7 @@ import java.util.List;
 public class MenuController {
 
     @Resource
-    private IMenuService menuService;
+    private MenuService menuService;
 
     @Resource
     private DictMapper dictMapper;

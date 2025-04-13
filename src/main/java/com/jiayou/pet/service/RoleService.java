@@ -5,7 +5,7 @@ import com.jiayou.pet.entity.Role;
 
 import java.util.List;
 
-public interface IRoleService extends IService<Role> {
+public interface RoleService extends IService<Role> {
 
     void setRoleMenu(Integer roleId, List<Integer> menuIds);
 

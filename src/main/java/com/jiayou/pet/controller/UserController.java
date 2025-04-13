@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.Constants;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.User;
-import com.jiayou.pet.service.IUserService;
+import com.jiayou.pet.service.UserService;
 import com.jiayou.pet.utils.JwtUtil;
 import com.jiayou.pet.utils.SpringBeanUtil;
 import com.jiayou.pet.utils.WebSocketUtils;
@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 public class UserController {
 
     @Resource
-    private IUserService userService;
+    private UserService userService;
 
     @Resource
     private JwtUtil jwtUtil;
@@ -120,11 +120,11 @@ public class UserController {
         return R.success(userService.getById(id));
     }
 
-    @Operation(summary = "根据用户名查询用户")
-    @GetMapping("/username/{username}")
-    public R findByUsername(@PathVariable String username) {
+    @Operation(summary = "根据昵称查询用户")
+    @GetMapping("/nickname/{nickname}")
+    public R findByNickname(@PathVariable String nickname) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", username);
+        queryWrapper.eq("nickname", nickname);
         return R.success(userService.getOne(queryWrapper));
     }
 
@@ -133,13 +133,13 @@ public class UserController {
     public R findPage(
             @RequestParam Integer pageNum,
             @RequestParam Integer pageSize,
-            @RequestParam(defaultValue = "") String username,
+            @RequestParam(defaultValue = "") String nickname,
             @RequestParam(defaultValue = "") String email,
             @RequestParam(defaultValue = "") String address) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id");
-        if (!"".equals(username)) {
-            queryWrapper.like("username", username);
+        if (!"".equals(nickname)) {
+            queryWrapper.like("nickname", nickname);
         }
         if (!"".equals(email)) {
             queryWrapper.like("email", email);
@@ -159,10 +159,9 @@ public class UserController {
         // 在内存操作，写出到浏览器
         ExcelWriter writer = ExcelUtil.getWriter(true);
         // 自定义标题别名
-        writer.addHeaderAlias("username", "用户名");
-        writer.addHeaderAlias("password", "密码");
         writer.addHeaderAlias("nickname", "昵称");
         writer.addHeaderAlias("email", "邮箱");
+        writer.addHeaderAlias("password", "密码");
         writer.addHeaderAlias("phone", "电话");
         writer.addHeaderAlias("address", "地址");
         writer.addHeaderAlias("createTime", "创建时间");
@@ -192,12 +191,11 @@ public class UserController {
         List<User> users = CollUtil.newArrayList();
         for (List<Object> row : list) {
             User user = new User();
-            user.setUsername(row.get(0).toString());
-            user.setPassword(row.get(1).toString());
-            user.setNickname(row.get(2).toString());
-            user.setEmail(row.get(3).toString());
-            user.setPhone(row.get(4).toString());
-            user.setAddress(row.get(5).toString());
+            user.setNickname(row.get(0).toString());
+            user.setEmail(row.get(1).toString());
+            user.setPassword(row.get(2).toString());
+            user.setPhone(row.get(3).toString());
+            user.setAddress(row.get(4).toString());
             user.setAvatarUrl(row.get(6).toString());
             users.add(user);
         }

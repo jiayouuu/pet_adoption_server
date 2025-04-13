@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Salvation;
-import com.jiayou.pet.service.ISalvationService;
+import com.jiayou.pet.service.SalvationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -24,7 +24,7 @@ import java.util.List;
 public class SalvationController {
 
     @Resource
-    private ISalvationService salvationService;
+    private SalvationService salvationService;
 
     @Operation(summary = "保存救助现场信息")
     @PostMapping

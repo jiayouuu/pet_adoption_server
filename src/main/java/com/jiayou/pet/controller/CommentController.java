@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Comment;
 import com.jiayou.pet.entity.User;
-import com.jiayou.pet.service.ICommentService;
-import com.jiayou.pet.service.IUserService;
+import com.jiayou.pet.service.CommentService;
+import com.jiayou.pet.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -30,10 +30,10 @@ import java.util.stream.Collectors;
 public class CommentController {
 
     @Resource
-    private ICommentService commentService;
+    private CommentService commentService;
 
     @Resource
-    private IUserService userService;
+    private UserService userService;
 
     @Operation(summary = "保存评论")
     @PostMapping

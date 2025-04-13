@@ -9,7 +9,6 @@ import com.jiayou.pet.utils.WebSocketUtils;
 import jakarta.annotation.Resource;
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -37,12 +36,9 @@ public class FileServiceImpl implements FileService {
 
     @Resource
     private WebSocketUtils webSocketUtils;
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate; // 注入 WebSocket 消息模板
 
     public FileServiceImpl(FileUploadConfig fileUploadConfig, SimpMessagingTemplate messagingTemplate) {
         this.fileUploadConfig = fileUploadConfig;
-        this.messagingTemplate = messagingTemplate;
     }
 
     @Override

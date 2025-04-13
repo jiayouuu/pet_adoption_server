@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.ArticleKp;
-import com.jiayou.pet.service.IArticleKpService;
+import com.jiayou.pet.service.ArticleKpService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -26,7 +26,7 @@ import java.util.List;
 public class ArticleKpController {
 
     @Resource
-    private IArticleKpService articleKpService;
+    private ArticleKpService articleKpService;
 
     @Operation(summary = "保存文章封面")
     @PostMapping

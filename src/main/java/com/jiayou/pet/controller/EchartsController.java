@@ -5,7 +5,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.Quarter;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.User;
-import com.jiayou.pet.service.IUserService;
+import com.jiayou.pet.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -30,7 +30,7 @@ import java.util.Map;
 public class EchartsController {
 
     @Resource
-    private IUserService userService;
+    private UserService userService;
 
     @Operation(summary = "获取示例数据")
     @GetMapping("/example")

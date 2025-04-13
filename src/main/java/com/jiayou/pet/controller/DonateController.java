@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Donate;
-import com.jiayou.pet.service.IDonateService;
+import com.jiayou.pet.service.DonateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -24,7 +24,7 @@ import java.util.List;
 public class DonateController {
 
     @Resource
-    private IDonateService donateService;
+    private DonateService donateService;
 
     @Operation(summary = "保存捐款")
     @PostMapping

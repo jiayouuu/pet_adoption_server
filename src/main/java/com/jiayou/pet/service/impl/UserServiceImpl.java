@@ -9,8 +9,8 @@ import com.jiayou.pet.entity.User;
 import com.jiayou.pet.mapper.RoleMapper;
 import com.jiayou.pet.mapper.RoleMenuMapper;
 import com.jiayou.pet.mapper.UserMapper;
-import com.jiayou.pet.service.IMenuService;
-import com.jiayou.pet.service.IUserService;
+import com.jiayou.pet.service.MenuService;
+import com.jiayou.pet.service.UserService;
 import com.jiayou.pet.utils.Encrypt;
 import com.jiayou.pet.utils.JwtUtil;
 import com.jiayou.pet.utils.SpringBeanUtil;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Resource
     private UserMapper userMapper;
@@ -38,7 +38,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private RoleMenuMapper roleMenuMapper;
 
     @Resource
-    private IMenuService menuService;
+    private MenuService menuService;
 
     private JwtUtil jwtUtil;
 
@@ -81,7 +81,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 默认一个普通用户的角色
         user.setPassword(Encrypt.hashPassword(user.getPassword()));
         user.setNickname(user.getEmail());
-        user.setUsername(user.getEmail());
         user.setRole(RoleEnum.USER.toString());
         if (!save(user)) {
             return R.error(400, "注册失败");

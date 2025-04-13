@@ -6,8 +6,8 @@ import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Animal;
 import com.jiayou.pet.entity.Applcation;
 import com.jiayou.pet.entity.User;
-import com.jiayou.pet.service.IAnimalService;
-import com.jiayou.pet.service.IApplcationService;
+import com.jiayou.pet.service.AnimalService;
+import com.jiayou.pet.service.ApplcationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -28,10 +28,10 @@ import java.util.List;
 public class ApplcationController {
 
     @Resource
-    private IApplcationService applcationService;
+    private ApplcationService applcationService;
 
     @Resource
-    private IAnimalService animalService;
+    private AnimalService animalService;
 
     @Operation(summary = "保存领养申请")
     @PostMapping

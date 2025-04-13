@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Article;
-import com.jiayou.pet.service.IArticleService;
+import com.jiayou.pet.service.ArticleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -25,7 +25,7 @@ import java.util.List;
 public class ArticleController {
 
     @Resource
-    private IArticleService articleService;
+    private ArticleService articleService;
 
     @Operation(summary = "保存文章")
     @PostMapping

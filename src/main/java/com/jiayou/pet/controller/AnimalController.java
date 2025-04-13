@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Animal;
-import com.jiayou.pet.service.IAnimalService;
+import com.jiayou.pet.service.AnimalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -24,7 +24,7 @@ import java.util.List;
 public class AnimalController {
 
     @Resource
-    private IAnimalService animalService;
+    private AnimalService animalService;
 
     @Operation(summary = "保存动物信息")
     @PostMapping

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Role;
-import com.jiayou.pet.service.IRoleService;
+import com.jiayou.pet.service.RoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -24,7 +24,7 @@ import java.util.List;
 public class RoleController {
 
     @Resource
-    private IRoleService roleService;
+    private RoleService roleService;
 
     @Operation(summary = "保存角色")
     @PostMapping

@@ -1,8 +1,8 @@
 package com.jiayou.pet.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.jiayou.pet.entity.Lost;
+import com.jiayou.pet.entity.Rescue;
 
-public interface ILostService extends IService<Lost> {
+public interface RescueService extends IService<Rescue> {
 
 }

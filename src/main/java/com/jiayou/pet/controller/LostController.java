@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.entity.Lost;
-import com.jiayou.pet.service.ILostService;
+import com.jiayou.pet.service.LostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
@@ -24,7 +24,7 @@ import java.util.List;
 public class LostController {
 
     @Resource
-    private ILostService lostService;
+    private LostService lostService;
 
     @Operation(summary = "保存宠物走失信息")
     @PostMapping

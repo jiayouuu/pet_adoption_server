@@ -7,8 +7,8 @@ import com.jiayou.pet.entity.Role;
 import com.jiayou.pet.entity.RoleMenu;
 import com.jiayou.pet.mapper.RoleMapper;
 import com.jiayou.pet.mapper.RoleMenuMapper;
-import com.jiayou.pet.service.IMenuService;
-import com.jiayou.pet.service.IRoleService;
+import com.jiayou.pet.service.MenuService;
+import com.jiayou.pet.service.RoleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +16,13 @@ import jakarta.annotation.Resource;
 import java.util.List;
 
 @Service
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements IRoleService {
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
     @Resource
     private RoleMenuMapper roleMenuMapper;
 
     @Resource
-    private IMenuService menuService;
+    private MenuService menuService;
 
     @Transactional
     @Override
