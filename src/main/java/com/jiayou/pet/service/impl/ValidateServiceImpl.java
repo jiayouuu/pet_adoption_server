@@ -113,7 +113,6 @@ public class ValidateServiceImpl implements ValidateService {
         HashMap<String, Object> map = new HashMap<>();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String tokenEmail = authentication.getName();
-        System.out.println(tokenEmail);
         // 用于验证邮箱验证码的临时token过期，则相应验证码过期
         if(tokenEmail.equals("anonymousUser")){
             return R.error(400, "验证码已过期");

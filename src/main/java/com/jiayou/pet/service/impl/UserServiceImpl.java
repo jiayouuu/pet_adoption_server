@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.jiayou.pet.common.R;
 import com.jiayou.pet.common.RoleEnum;
-import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.Menu;
 import com.jiayou.pet.entity.User;
 import com.jiayou.pet.mapper.RoleMapper;
@@ -42,27 +41,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private IMenuService menuService;
 
     private JwtUtil jwtUtil;
+
     public UserServiceImpl(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
+
     @Override
     public R login(User user) {
         User existUser = userMapper.findByEmail(user.getEmail());
-        if(existUser == null){
-            return R.error(400,"邮箱未注册");
+        if (existUser == null) {
+            return R.error(400, "邮箱未注册");
         }
         if (!Encrypt.checkPassword(user.getPassword(), existUser.getPassword())) {
-            return R.error(400,"密码错误");
+            return R.error(400, "密码错误");
         }
 
-            // 设置token
-            // String token = TokenUtils.genToken(one.getId().toString(), one.getPassword());
-            // todo
-            existUser.setPassword(null);
-            String token = jwtUtil.generateToken(SpringBeanUtil.objectToMap(existUser), 7, TimeUnit.DAYS);
-            HashMap<String,Object> map = new HashMap<>();
-            map.put("token",token);
-            return R.success(map);
+        // 设置token
+        // String token = TokenUtils.genToken(one.getId().toString(),
+        // one.getPassword());
+        // todo
+        existUser.setPassword(null);
+        String token = jwtUtil.generateToken(SpringBeanUtil.objectToMap(existUser), 7, TimeUnit.DAYS);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        return R.success(map);
 
     }
 
@@ -73,25 +75,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (!tokenEmail.equals(user.getEmail())) {
             return R.error(400, "邮箱不匹配,请重试");
         }
-        if (null !=getOne(Wrappers.<User>lambdaQuery().eq(User::getEmail, user.getEmail()))) {
-            return R.error(400,"邮箱已经注册，请直接登录");
-        } 
+        if (null != getOne(Wrappers.<User>lambdaQuery().eq(User::getEmail, user.getEmail()))) {
+            return R.error(400, "邮箱已经注册，请直接登录");
+        }
         // 默认一个普通用户的角色
         user.setPassword(Encrypt.hashPassword(user.getPassword()));
         user.setNickname(user.getEmail());
         user.setUsername(user.getEmail());
         user.setRole(RoleEnum.USER.toString());
-        if(!save(user)){
-            return R.error(400,"注册失败");
+        if (!save(user)) {
+            return R.error(400, "注册失败");
         }
         return R.success();
     }
 
     @Override
-    public R updatePassword(UserPasswordDTO userPasswordDTO) {
-        int update = userMapper.updatePassword(userPasswordDTO);
+    public R updatePassword(String newPassword) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        String password = Encrypt.hashPassword(newPassword);
+        int update = userMapper.updatePassword(email, password);
         if (update < 1) {
-            return R.error(400,"密码错误");
+            return R.error(400, "密码错误");
         }
         return R.success();
     }

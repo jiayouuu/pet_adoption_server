@@ -1,7 +1,6 @@
 package com.jiayou.pet.controller;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
@@ -9,7 +8,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jiayou.pet.common.Constants;
 import com.jiayou.pet.common.R;
-import com.jiayou.pet.controller.dto.UserPasswordDTO;
 import com.jiayou.pet.entity.User;
 import com.jiayou.pet.service.IUserService;
 import com.jiayou.pet.utils.JwtUtil;
@@ -26,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -88,26 +87,13 @@ public class UserController {
 
     @Operation(summary = "修改密码")
     @PostMapping("/password")
-    public R password(@RequestBody UserPasswordDTO userPasswordDTO) {
-        return userService.updatePassword(userPasswordDTO);
-    }
-
-    @Operation(summary = "重置密码")
-    @PutMapping("/reset")
-    public R reset(@RequestBody UserPasswordDTO userPasswordDTO) {
-        if (StrUtil.isBlank(userPasswordDTO.getUsername()) || StrUtil.isBlank(userPasswordDTO.getPhone())) {
-            return R.error(-1, "参数异常");
+    public R password(@RequestBody HashMap<String, String> map) {
+        try {
+            String password = map.get("newPassword");
+            return userService.updatePassword(password);
+        } catch (Exception e) {
+            return R.error(500, e.getMessage());
         }
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("username", userPasswordDTO.getUsername());
-        queryWrapper.eq("phone", userPasswordDTO.getPhone());
-        List<User> list = userService.list(queryWrapper);
-        if (CollUtil.isNotEmpty(list)) {
-            User user = list.get(0);
-            user.setPassword("123");
-            userService.updateById(user);
-        }
-        return R.success();
     }
 
     @Operation(summary = "删除用户")
